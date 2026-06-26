@@ -125,3 +125,84 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ─── Global Tab Content Spacing ──────────────────────────────────────────── */
+/* Ensures consistent margins and readable line widths across all tab panels */
+
+.tab-panel-content {
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+/* Card inner content — prevent text from touching card edges */
+.card-body {
+  @apply p-5 sm:p-6;
+}
+
+/* Prevent any prose text from exceeding comfortable reading width */
+.prose-constrained {
+  max-width: 72ch;
+}
+
+/* Tables — prevent horizontal overflow on small screens */
+.table-scroll {
+  @apply overflow-x-auto rounded-lg;
+}
+
+/* Section headings — consistent spacing above/below */
+.section-heading {
+  @apply mb-4 mt-0 font-serif text-xl font-bold text-primary;
+}
+
+/* Input group spacing inside cards */
+.input-group {
+  @apply space-y-2;
+}
+
+/* ─── Global padding fix for all TabsContent children ─────────────────────── */
+/* Targets the direct wrapper divs inside tab panels */
+[role="tabpanel"] > div {
+  @apply w-full;
+}
+
+/* Education center, scenario cards, and other full-bleed panels */
+[role="tabpanel"] .space-y-6 > * {
+  @apply w-full;
+}
+
+/* Fix cards that previously had no horizontal padding on mobile */
+@media (max-width: 640px) {
+  .card-mobile-fix {
+    @apply rounded-none border-x-0;
+  }
+
+  /* Ensure tab trigger labels don't overflow */
+  [role="tab"] span {
+    @apply text-xs;
+  }
+}
+
+/* ─── Circle Brand Typography Helpers ─────────────────────────────────────── */
+.brand-label {
+  @apply text-xs font-bold uppercase tracking-widest text-muted-foreground;
+}
+
+.brand-heading {
+  @apply font-serif text-2xl font-bold text-primary;
+}
+
+.brand-subheading {
+  @apply font-serif text-lg font-semibold text-foreground;
+}
+
+.brand-gold-rule {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  border: none;
+  margin: 1.5rem 0;
+}
+
+/* ─── PDF Print Styles ─────────────────────────────────────────────────────── */
+@media print {
+  .no-print { display: none !important; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
