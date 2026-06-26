@@ -54,6 +54,22 @@ export default function EquityCompensationDashboard() {
   // Auth
   const { user, isAuthenticated, isLoading, logout } = useAuth()
 
+  // ── Data version guard ──────────────────────────────────────
+  // If localStorage was written by an older version of the app
+  // (e.g. one that seeded sample data by default), clear it so
+  // the welcome screen shows correctly for returning users.
+  const APP_VERSION = "2.0"
+  if (typeof window !== "undefined") {
+    const storedVersion = localStorage.getItem("circle_app_version")
+    if (storedVersion !== APP_VERSION) {
+      // Clear all circle_ keys from old version
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("circle_") && k !== "circle_session")
+        .forEach((k) => localStorage.removeItem(k))
+      localStorage.setItem("circle_app_version", APP_VERSION)
+    }
+  }
+
   // State - Load grants from localStorage if available
   const [grants, setGrants] = useState<Grant[]>(() => {
     if (typeof window !== "undefined") {
