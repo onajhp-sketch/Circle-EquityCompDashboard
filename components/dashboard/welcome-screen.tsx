@@ -40,7 +40,7 @@ export function WelcomeScreen({ onOpenClients, onOpenSettings }: WelcomeScreenPr
       </div>
 
       {/* Action Cards */}
-      <div className="mb-14 grid w-full max-w-2xl gap-4 sm:grid-cols-2">
+      <div className="welcome-actions mb-14 grid w-full max-w-2xl gap-4 sm:grid-cols-2">
         {/* Load Client */}
         <button
           onClick={onOpenClients}

@@ -206,3 +206,148 @@
   .no-print { display: none !important; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+
+/* ─── Mobile Polish ────────────────────────────────────────────────────────── */
+
+/* Tab trigger list — wraps cleanly on narrow screens */
+@media (max-width: 768px) {
+  [role="tablist"] {
+    gap: 6px !important;
+  }
+
+  /* Smaller tab pills on mobile */
+  [role="tab"] {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    border-radius: 9999px !important;
+  }
+
+  /* Tab icons — hide on very small screens to save space */
+  @media (max-width: 400px) {
+    [role="tab"] svg {
+      display: none !important;
+    }
+  }
+
+  /* KPI cards — single column on phones */
+  .kpi-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Cards — reduce horizontal padding on mobile */
+  .card-content-mobile {
+    padding: 16px !important;
+  }
+
+  /* Tables — allow horizontal scroll, prevent text wrapping */
+  table {
+    min-width: 520px;
+  }
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+  }
+
+  /* Metric grids — single column on phones */
+  .metric-grid-mobile {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Sidebar panels (client profile, tax assumptions) — full width on mobile */
+  .sidebar-panel {
+    width: 100% !important;
+  }
+
+  /* Grant planner grid — stack on mobile */
+  .planner-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Dialog content — full width on mobile */
+  [role="dialog"] > div {
+    margin: 8px !important;
+    max-width: calc(100vw - 16px) !important;
+    max-height: calc(100vh - 32px) !important;
+  }
+
+  /* Header buttons — condense on mobile */
+  .header-actions button span {
+    display: none;
+  }
+
+  /* Welcome screen — tighter padding */
+  .welcome-actions {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  [role="tab"] {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* Ensure all card content has minimum padding */
+[class*="CardContent"] {
+  padding: clamp(12px, 3vw, 24px);
+}
+
+/* Prevent text overflow on narrow cards */
+.truncate-mobile {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Strategy comparison — stack on mobile */
+@media (max-width: 768px) {
+  .strategy-grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Monte Carlo result cards — 2 col on mobile */
+  .mc-results-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Charts — reduce height on mobile */
+  .chart-container-mobile {
+    height: 220px !important;
+  }
+
+  /* Input rows — stack on mobile */
+  .input-row-mobile {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Font size adjustments for financial figures */
+  .metric-value-mobile {
+    font-size: 1.4rem !important;
+  }
+}
+
+/* Touch targets — ensure all interactive elements are at least 44px tall */
+@media (max-width: 768px) {
+  button, [role="button"], input, select, textarea {
+    min-height: 40px;
+  }
+
+  /* Except icon-only buttons */
+  button[data-size="icon"] {
+    min-height: 32px;
+    min-width: 32px;
+  }
+}
+
+/* Smooth scrolling for tab navigation */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent horizontal page overflow */
+body {
+  overflow-x: hidden;
+}

@@ -17,6 +17,7 @@ import { ClientProfileSelector, type ClientProfile } from "@/components/dashboar
 import { PlanningNotes } from "@/components/dashboard/planning-notes"
 import { TaxLotOptimizer } from "@/components/dashboard/tax-lot-optimizer"
 import { AMTTracker } from "@/components/dashboard/amt-tracker"
+import { ElectionTracker } from "@/components/dashboard/election-tracker"
 import { MultiYearProjections } from "@/components/dashboard/multi-year-projections"
 import { StockTicker } from "@/components/dashboard/stock-ticker"
 import { WelcomeScreen } from "@/components/dashboard/welcome-screen"
@@ -501,6 +502,11 @@ export default function EquityCompensationDashboard() {
       icon: Shield,
     },
     {
+      value: "tax83b",
+      label: "83(b) Elections",
+      icon: FileSpreadsheet,
+    },
+    {
       value: "education",
       label: "Education",
       icon: GraduationCap,
@@ -605,7 +611,7 @@ export default function EquityCompensationDashboard() {
 
             {/* Grant Planner Tab */}
             <TabsContent value="planner" className="mt-0 space-y-6 w-full">
-              <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+              <div className="planner-grid grid gap-6 lg:grid-cols-[280px_1fr]">
                 <div className="space-y-4">
 <ClientProfileSelector
   profile={clientProfile}
@@ -692,6 +698,11 @@ export default function EquityCompensationDashboard() {
             {/* Tax & AMT Tab */}
             <TabsContent value="tax" className="mt-0">
               <AMTTracker isoExercises={isoExercises} amtRate={taxAssumptions.amtRate} hasGrants={grants.length > 0} />
+            </TabsContent>
+
+            {/* 83(b) Elections Tab */}
+            <TabsContent value="tax83b" className="mt-0">
+              <ElectionTracker hasGrants={grants.length > 0} />
             </TabsContent>
 
             {/* Blackouts Tab */}
