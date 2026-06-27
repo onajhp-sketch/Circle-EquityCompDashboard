@@ -325,7 +325,7 @@ export default function EquityCompensationDashboard() {
     const { preparedBy, preparedFor } = options
     const today = new Date()
     const formattedDate = today.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
-    const logoUrl = window.location.origin + "/images/circle-logo-horizontal.png"
+    const logoUrl = window.location.origin + "/images/circle-logo-skyline-new.png"
 
     const reportTitles: Record<string, string> = {
       "equity-summary":       "Equity Compensation Summary",

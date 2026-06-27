@@ -15,11 +15,11 @@ export function WelcomeScreen({ onOpenClients, onOpenSettings }: WelcomeScreenPr
       {/* Logo */}
       <div className="mb-10 flex flex-col items-center gap-4">
         <Image
-          src="/images/circle-logo-horizontal.png"
+          src="/images/circle-logo-skyline-new.png"
           alt="Circle Financial Planning"
-          width={280}
-          height={80}
-          className="h-auto w-64 object-contain"
+          width={200}
+          height={200}
+          className="h-auto w-40 object-contain drop-shadow-md"
           priority
         />
         <div className="h-px w-48 bg-gradient-to-r from-transparent via-[#c9a227] to-transparent" />

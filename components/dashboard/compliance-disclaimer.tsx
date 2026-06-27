@@ -9,9 +9,9 @@ export function ComplianceDisclaimer() {
         <div className="flex flex-col items-center gap-6 text-center">
           {/* Logo */}
           <img 
-            src="/images/circle-logo-horizontal.png" 
+            src="/images/circle-logo-skyline-new.png" 
             alt="Circle Financial Planning - Boutique Care. Institutional Insight." 
-            className="h-24 w-auto max-w-full object-contain sm:h-28 md:h-32"
+            className="h-28 w-28 object-contain drop-shadow-sm sm:h-32 sm:w-32"
           />
           
           <div className="flex items-center gap-2 text-muted-foreground">
