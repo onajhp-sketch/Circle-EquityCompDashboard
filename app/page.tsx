@@ -321,11 +321,17 @@ export default function EquityCompensationDashboard() {
     setReportsOpen(true)
   }
 
-  const handleGenerateReport = (reportType: string, options: ReportOptions) => {
+  const handleGenerateReport = async (reportType: string, options: ReportOptions) => {
     const { preparedBy, preparedFor } = options
     const today = new Date()
     const formattedDate = today.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
-    const logoUrl = window.location.origin + "/images/circle-logo-skyline-new.png"
+    const logoUrl = await fetch("/images/circle-logo-skyline-new.png")
+      .then(r => r.blob())
+      .then(blob => new Promise<string>((resolve) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result as string)
+        reader.readAsDataURL(blob)
+      }))
 
     const reportTitles: Record<string, string> = {
       "equity-summary":       "Equity Compensation Summary",

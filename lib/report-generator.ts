@@ -77,7 +77,7 @@ const BASE_CSS = `
     justify-content: center;
   }
   .cover-logo {
-    height: 80px;
+    height: 60px;
     width: auto;
     filter: brightness(0) invert(1);
   }
@@ -189,7 +189,7 @@ const BASE_CSS = `
     justify-content: space-between;
   }
   .page-header-logo {
-    height: 44px;
+    height: 36px;
     width: auto;
     filter: brightness(0) invert(1);
   }
