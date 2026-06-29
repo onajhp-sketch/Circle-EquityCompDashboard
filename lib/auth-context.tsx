@@ -1,62 +1,123 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+// lib/auth-context.tsx
+// Replaces the old single-password auth with per-advisor Supabase login
+// Drop-in replacement — existing components that call useAuth() still work
 
-// Fixed user profile - no editing allowed
-const FIXED_USER = {
-  name: "CircleFP",
-  firmName: "Circle Financial Planning",
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  type ReactNode,
+} from "react"
+import { supabase, type DbAdvisor } from "./supabase"
+import type { Session, User } from "@supabase/supabase-js"
+
+interface AuthUser {
+  id: string
+  email: string
+  name: string
+  firmName: string
 }
 
-// Site password
-const SITE_PASSWORD = "CircleFP2026"
-
 interface AuthContextType {
-  user: { name: string; firmName: string } | null
+  user: AuthUser | null
   isAuthenticated: boolean
   isLoading: boolean
-  login: (password: string) => boolean
-  logout: () => void
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [user, setUser] = useState<AuthUser | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Check for existing session on mount
+  const buildAuthUser = useCallback(
+    async (supabaseUser: User): Promise<AuthUser> => {
+      const { data: advisor } = await supabase
+        .from("advisors")
+        .select("full_name, firm_name")
+        .eq("id", supabaseUser.id)
+        .single<Pick<DbAdvisor, "full_name" | "firm_name">>()
+
+      return {
+        id: supabaseUser.id,
+        email: supabaseUser.email ?? "",
+        name: advisor?.full_name || supabaseUser.email?.split("@")[0] || "Advisor",
+        firmName: advisor?.firm_name || "Circle Financial Planning",
+      }
+    },
+    []
+  )
+
   useEffect(() => {
-    const session = localStorage.getItem("circle_session")
-    if (session === "active") {
-      setIsAuthenticated(true)
+    let mounted = true
+
+    const initAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user && mounted) {
+        const authUser = await buildAuthUser(session.user)
+        setUser(authUser)
+      }
+      if (mounted) setIsLoading(false)
     }
-    setIsLoading(false)
+
+    initAuth()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session: Session | null) => {
+        if (!mounted) return
+        if (session?.user) {
+          const authUser = await buildAuthUser(session.user)
+          setUser(authUser)
+        } else {
+          setUser(null)
+        }
+        setIsLoading(false)
+      }
+    )
+
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
+  }, [buildAuthUser])
+
+  const login = useCallback(
+    async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+      setIsLoading(true)
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email.trim().toLowerCase(),
+          password,
+        })
+        if (error) return { success: false, error: error.message }
+        if (data.user) {
+          const authUser = await buildAuthUser(data.user)
+          setUser(authUser)
+        }
+        return { success: true }
+      } catch {
+        return { success: false, error: "An unexpected error occurred" }
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [buildAuthUser]
+  )
+
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut()
+    setUser(null)
   }, [])
-
-  const login = (password: string): boolean => {
-    if (password === SITE_PASSWORD) {
-      setIsAuthenticated(true)
-      localStorage.setItem("circle_session", "active")
-      return true
-    }
-    return false
-  }
-
-  const logout = () => {
-    setIsAuthenticated(false)
-    localStorage.removeItem("circle_session")
-  }
 
   return (
     <AuthContext.Provider
-      value={{
-        user: isAuthenticated ? FIXED_USER : null,
-        isAuthenticated,
-        isLoading,
-        login,
-        logout,
-      }}
+      value={{ user, isAuthenticated: !!user, isLoading, login, logout }}
     >
       {children}
     </AuthContext.Provider>
